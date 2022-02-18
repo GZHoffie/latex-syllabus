@@ -1,0 +1,137 @@
+\documentclass[12pt]{article}
+\usepackage[top=1in, left=1in, right=1in, bottom=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{minted}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+\usepackage{float}
+\setlength{\parskip}{1em}
+\setlength{\parindent}{0em}
+\title{README for \texttt{syllabus.sty}}
+\author{GZHoffie}
+\begin{document}
+\maketitle
+
+Hi! A man got too bored during the spring semester. This is what happened to his \LaTeX~packages.
+
+\section{Introduction}
+This \texttt{syllabus} package is designed to make writing syllabus more enjoyable and easier. To make full use of this package, you will need the following files:
+\begin{itemize}
+    \item Your course description file \texttt{course\_description.tex},
+    \item \texttt{syllabus.sty}, of course,
+    \item a CSV file \texttt{schedule.csv}, which includes the course topics and their corresponding dates,
+    \item (Optional) two TEX files \texttt{topic\_description.tex} and \texttt{topic\_title.tex}, which are useful if you want to only use keywords instead of long sentences in \texttt{schedule.csv},
+\end{itemize}
+
+\section{Compilation}
+We need to set the compiler as XeLatex for the packages for Chinese fonts to work.
+\section{Build up Your Schedule}
+Let's start with building a schedule in \texttt{schedule.csv}. I designed the CSV file to have the following fields:
+\begin{enumerate}
+    \item \texttt{start\_of\_week}
+    
+    This should be an integer, zero or positive, indicating whether the event is the first event of the week.
+    
+    If this line is the first line of the week, then we set the number to be the \textbf{total number of events of this week}. Otherwise we set it to 0.
+    
+    \item \texttt{type}
+    
+    This field is an integer indicating the type of event. Currently only 3 types are defined,
+    
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{cl}
+        \toprule
+            \texttt{type} & Meaning \\
+        \midrule
+           0  & A fixed event, such as Discussion, Film, Reading sections, etc. \\
+           1  & Student Presentations\\
+           2 & Quizzes\\
+        \bottomrule
+        \end{tabular}
+        \caption{Types of events in the syllabus}
+        \label{tab:my_label}
+    \end{table}
+    \item \texttt{content}
+    
+    This field is a string indicating the detailed content of the event. How the field is displayed on the syllabus is decided by the \texttt{type} field.
+    
+    \begin{itemize}
+        \item If the event is of type 0 (fixed event), then the \texttt{content} field will directly be used as the course topic. 
+        
+        e.g. Discussion of topics for the presentations
+        \item If the event is of type 1 (student presentation), then the \texttt{content} field should be a \texttt{keyword} of the topics. The keywords must be one single word. \label{keyword}
+        
+        e.g. empire
+        \item If the event is of type 2 (quiz), then the \texttt{content} field should be some numbers indicating which topics are covered.
+        
+        e.g. 1-6
+    \end{itemize}
+    \item \texttt{people}
+    
+    This filed should be a string, indicating who will be giving the presentation if the event is of type 1. This field can be left blank for type 0 and type 2.
+    
+    \item \texttt{days\_since\_monday}
+    
+    This field should be an integer indicating on which day the event will take place. 1 for Monday, 2 for Tuesday, and so on and so forth. If you don't want to display date on this row, simply write 0.
+    
+\end{enumerate}
+An example of schedule can be seen in \texttt{schedule.csv} under this directory.
+\section{Student Presentations}
+I introduced the following design so that the presentation topics description can update automatically with the schedule.
+\subsection{Titles}
+We put all the titles of presentation in the file \texttt{topic\_title.tex}, in which the titles are separated with tags. Each tag correspond to the keyword you set in field \ref{keyword} of \texttt{schedule.csv}. 
+
+For example, for the first topic \textit{German Empire}, we can set the keyword as \textit{empire}, and add the following entry into \texttt{topic\_title.tex}.
+\begin{minted}[linenos,tabsize=2,breaklines]{latex}
+%<*empire>
+The German Empire
+%</empire>
+\end{minted}
+Keep adding the entries until all the keywords are included, otherwise the title won't display on the syllabus. Checkout the file to see the keywords and titles that are already available!
+\subsection{Description}
+Similarly we include the description of each topic in \texttt{topic\_description.tex}, in which the detailed bullet points are stored and separated using the same tags as before.
+
+Again take \textit{German Empire} as example, we have
+\begin{minted}[linenos,tabsize=2,breaklines]{latex}
+%<*empire>
+\begin{itemize}
+\item When was the German Empire established and under what circumstances was this done?
+\item Which states were included and which ones were excluded? Explain the ``Kleindeutsche Lösung'' vs. the ``Gro\ss deutsche Lösung''.
+\item What was the system of government?
+\item How did Germany develop economically and politically during the empire?
+\item How did the empire come to an end?
+\item ...
+\end{itemize}
+%</empire>
+\end{minted}
+
+\section{Final Setup}
+Finally we need to set some basic course information in the \texttt{course\_description.tex}, following the steps:
+\begin{enumerate}
+    \item Set the first day of school, so that the schedule can complete by itself. This day \textbf{must be Monday} for the dates to be calculated correctly!
+    \begin{minted}[linenos,tabsize=2,breaklines]{latex}
+\setdate{2021}{2}{22} % 2021/2/22 is the first day of school
+\end{minted}
+    
+    Note that by default, the syllabus don't skip weeks. So if there is no class in a week, we need to add a line in \texttt{schedule.csv} with \texttt{start\_of\_week} set to 1, indicating a week has passed.
+    \item Set course basic information
+    \begin{minted}[linenos,tabsize=2,breaklines]{latex}
+\title{VR150 German Culture}
+\semester{Spring 2021}
+\instructor{Quanbo Xie}
+\subtitle{Course Description}
+\end{minted}
+    
+    
+\end{enumerate}
+
+
+And you are ready to go! 
+
+\end{document}

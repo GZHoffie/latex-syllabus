@@ -1,0 +1,129 @@
+% formatting
+\RequirePackage{setspace}
+\RequirePackage{ctex}
+\setCJKsansfont[ItalicFont=Noto Sans CJK SC Bold, BoldFont=Noto Serif CJK SC Black]{AR PL UKai CN}
+\setlength{\parskip}{1em}
+\setlength{\parindent}{0em}
+\RequirePackage{float}
+\RequirePackage{booktabs}
+\RequirePackage{multirow}
+\RequirePackage{amsmath}
+\RequirePackage{graphicx}
+\RequirePackage{stringstrings}
+\RequirePackage{longtable}
+\RequirePackage{catchfilebetweentags}
+\RequirePackage{hyperref}
+
+\setlength{\LTpre}{20pt}
+\setlength{\LTpost}{0pt}
+
+% Dates
+\RequirePackage{advdate}    % Advancing/saving dates
+\RequirePackage{datetime}   % Dates formatting
+\RequirePackage{datenumber} % Counters for dates
+\renewcommand{\dateseparator}{-}
+
+% CSV reader
+\RequirePackage{datatool}
+
+% Fonts
+\RequirePackage{cmbright} \RequirePackage[T1]{fontenc}
+\RequirePackage[cm]{sfmath}
+\RequirePackage{dsfont}
+
+\doublespacing
+
+% Custom Commands
+\renewcommand{\baselinestretch}{1}
+\newcounter{lastTopicCounter}
+\newcounter{topicCounter}
+\newcounter{topicDescCounter}
+\newcounter{quizCounter}
+\newcounter{weekCounter}
+
+\newcommand*{\topic}[2]{%
+    \stepcounter{topicCounter}%
+    Topic~\arabic{topicCounter}:~#1~(#2)%
+    }
+\newcommand*{\quiz}[1]{
+    \stepcounter{quizCounter}%
+    \textbf{Quiz~\arabic{quizCounter}~(Topics~#1)}%
+}
+\newcommand*{\topicDesc}[1]{%
+    \stepcounter{topicDescCounter}%
+    Topic~\arabic{topicDescCounter}&\ExecuteMetaData[topic_title]{#1}\ExecuteMetaData[topic_description]{#1}%
+    }
+\newcommand*{\NewWeek}[1]{
+    \ifnum #1>0
+        \stepcounter{weekCounter}%
+        \multirow{#1}{*}{\arabic{weekCounter}}
+    \fi
+}
+\newcommand*{\LectureSubject}[3]{
+    \ifnum #1=0
+        #2
+    \fi
+    \ifnum #1=1
+        \topic{\ExecuteMetaData[topic_title]{#2}}{#3}
+    \fi
+    \ifnum #1=2
+        \quiz{#2}
+    \fi
+}
+\newif\iffirst
+\global\firsttrue
+\newcommand*{\NextLectureDate}[2]{
+    %\setdatetoday
+    %\addtocounter{datenumber}{10}%
+    \setdatebynumber{\thedatenumber}%
+    
+    \ifnum #1>0
+        \iffirst
+            \global\firstfalse
+        \else
+            \addtocounter{datenumber}{7}%
+        \fi
+    \fi
+    \ifnum #2>0
+        \addtocounter{datenumber}{#2}%
+        \addtocounter{datenumber}{-1}%
+        \setdatebynumber{\thedatenumber}
+        \thedateday-\thedatemonth-\substring{\thedateyear}{3}{4}
+        \addtocounter{datenumber}{-#2}%
+        \addtocounter{datenumber}{1}%
+    \fi
+}
+
+% Course Information
+\newcommand*{\subtitle}[1]{\gdef\@subtitle{#1}}
+\newcommand*{\@subtitle}{Subtitle}
+\newcommand*{\semester}[1]{\gdef\@semester{#1}\def\thesemester{\@semester}}
+\newcommand*{\@semester}{}
+\newcommand*{\instructor}[1]{\gdef\@instructor{#1}}
+\newcommand*{\@instructor}{\href{mailto:quanbo.xie@sjtu.edu.cn}{Quanbo Xie}}
+\newcommand{\noinstructor}{\renewcommand*{\@instructor}{}}
+\date{}
+
+% maketitle
+\renewcommand{\maketitle}{
+
+\noindent
+\begin{minipage}[H]{0.65\textwidth}
+\vspace{0.3cm}
+\LARGE{\textbf{\@title}}
+
+\vspace{0.8cm}
+
+\large{\textbf{\@semester~-~\@instructor}}\\
+\large{\textbf{\@subtitle}}\\
+\end{minipage}
+\hfill
+\begin{minipage}[H]{0.25\textwidth}
+
+\includegraphics[width=\textwidth]{JI_small.pdf}
+
+
+\end{minipage}
+\vspace{0.3cm}
+
+}

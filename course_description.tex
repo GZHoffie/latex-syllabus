@@ -1,0 +1,104 @@
+\documentclass[12pt]{article}
+\include{packages}
+\include{macros}
+
+\usepackage{syllabus}
+\usepackage[top=1in, left=1in, right=1in, bottom=1in]{geometry}
+
+% ----------------------------------------------------------------------------------------------------------------------------------
+
+% Set the first lecture date (Monday)
+\setdate{2021}{2}{22}
+
+% Course Information
+\title{VR150 German Culture}
+\semester{Spring 2021}
+%\instructor{Quanbo Xie}
+\subtitle{Course Description}
+
+% Load Schedule file
+\DTLloaddb{schedule}{schedule.csv}
+
+\begin{document}
+
+% ----------------------------------------------------------------------------------------------------------------------------------
+
+\maketitle
+
+\subsection*{Prerequisites}
+Vw110 German I or participation in German course level A1.1. 
+\subsection*{Course Description}
+This seminar gives an overview of German history, government and legislative system, political parties, economic policies and the education system. Furthermore, students will learn about German eating habits, regional food specialties, holidays and festivals such as the German national holidays in different periods of the $20^{\text{th}}$ century and their history, Christmas and Easter traditions as well as cultural touchstones, such as the Munich Beer Festival.
+
+The course will be taught in English, but also utilize materials in simple German, short movies and other material to give students a varied and vivid picture of the German society and culture.
+\subsection*{Grading Policy}
+Each student is expected to give two presentations throughout the term, on a topic chosen by the instructor in consultation with the students.  Students will work together in teams of 2 students for a single presentation on a given topic. 
+
+Class participation also enters into the course grade. Students are expected to attend all classes unless excused, be attentive to the speaker of a presentation, to ask questions where warranted and to participate in the discussion of a given topic after the talk. 
+The topics presented will also be the subject of a certain number of Quizzes during the term. 
+
+The grade components for the course are as follows:
+\begin{itemize}
+    \item Presentation 1: 25\%
+    \item Presentation 2: 25\%
+    \item Class participation: 20\%
+    \item Quizzes: 30\%
+\end{itemize}
+\subsection*{Honor Code Policy}
+JI's Honor Code applies to the presentations and quizzes of the course. Student teams are expected to prepare presentations independently and by themselves (discussion within a team is of course permitted!). The rules of the Honor Code regarding examinations apply to the quizzes during the term.
+
+\subsection*{Presentations}
+Students are required to consult with the course teaching assistant \textit{2-3 days (at least 36 hours)} before the time of their presentation. (Exceptions may be made in exceptional circumstances). Furthermore, presentation slides must be uploaded to Canvas \textit{on the day of the presentation}.  Failure to perform either of these actions will result in a deduction of marks from the presentation score (see below). 
+
+Unless otherwise noted, presentations will take 45 minutes, including a five-minute period for questions and answers from the audience. Speakers should not finish early, nor take longer than this (the instructor will end the presentation after the allotted time).
+
+It is the speakers' responsibility to verify well before the start of their presentation that the classroom infrastructure is suitable for their presentation (e.g., connectors to the laptop are appropriate, audio, if needed, is functional, etc.).
+
+Presentations are scored by the instructor as follows:
+\begin{longtable}{p{0.7\textwidth}c}
+     \multicolumn{1}{c}{Score factor}   &  Points\\
+    \midrule\midrule
+     Contents\\ {\scriptsize (Are the topics covered accurately and in sufficient depth? Is the material arranged in a coherent way? Is the content covered completely in the allotted time and is the allotted time used sensibly? Do the team members coordinate the parts of the topic well among each other?)\par}    &   10\\
+     Slide Layout\\{\scriptsize (Are the slides well-organized? Is the font size and color appropriate? Are the images and media used balanced with the text and contents? Is the number of slides adapted to the length of the presentation?)\par}  & 5\\
+     Presentation \\{\scriptsize (body language, fluency, interaction of the speaker with the audience, confidence and professionalism of the speaker)\par} & 5\\
+     Q\&A\\{\scriptsize (Do the speakers have sufficient depth of knowledge to answer questions from the audience?)\par} & 5
+\end{longtable}
+Scores will be given individually to each student.
+\subsection*{Class Participation}
+Students will be graded on their overall participation in class over the course of the term. Factors that will enter into the grade include, but are not limited to, 
+\begin{itemize}
+    \item Attendance of classes.
+    \item Attentiveness as audience member during presentations. \textit{Note}: it is formally forbidden to have laptops open or to use a mobile phone during a presentation.
+    \item Participation in the Q\&A sessions (e.g., amount and quality of questions asked).
+\end{itemize}
+\subsection*{Quizzes}
+There will be a number of quizzes on indicated topics of previous presentations. The quizzes will often have a multiple-choice as well as a textual component and usually be scheduled for 30-45 minutes. The answers to the quiz questions will be directly deducible from the past presentations on the relevant topics.  
+\subsection*{Course Schedule}
+
+\begin{longtable}{cp{0.75\textwidth}c}
+    \toprule
+    \textbf{Week} & \multicolumn{1}{c}{\textbf{Lecture Subject}} & \textbf{Date}
+    \DTLforeach{schedule}
+    {\StartOfWeek=start_of_week, \Type=type,\Content=content,\People=people,\DaysSinceMonday=days_since_monday}
+    {
+        \DTLifnumgt{\StartOfWeek}{0}{\\\midrule}{\\}%
+        \NewWeek{\StartOfWeek} & \LectureSubject{\Type}{\Content}{\People} & \NextLectureDate{\StartOfWeek}{\DaysSinceMonday}
+    }\\
+    \bottomrule
+\end{longtable}
+
+\subsection*{Description of Topics}
+Below are the topics for the group presentations together with some suggestions for themes that can be discussed in the presentations. You may choose some or all of these themes and you may also add more of your own devising. They are suggestions to help you get started, not a strict list of exercises to work through. 
+
+Note that your presentation should be a single, coherent whole, not a list of questions and answers! Please make sure that you cite your sources at the end of your presentation. 
+
+
+\begin{longtable}{lp{0.8\textwidth}}
+    \DTLforeach{schedule}
+    {\StartOfWeek=start_of_week, \Type=type,\Content=content,\People=people,\DaysSinceMonday=days_since_monday}
+    {
+        \DTLifnumeq{\Type}{1}{\\\topicDesc{\Content}}{\\}
+    }
+\end{longtable}
+
+\end{document}
